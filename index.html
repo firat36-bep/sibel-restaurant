@@ -1,1 +1,109 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sibel Yöresel Lezzetler</title>
+  <style>
+    body { font-family: Arial; background: #fff9f4; color: #333; padding: 20px; }
+    h1 { color: #8b0000; }
+    .menu-item { border-bottom: 1px solid #ccc; margin: 10px 0; padding: 10px 0; }
+    button { padding: 5px 10px; background: #8b0000; color: white; border: none; cursor: pointer; }
+    #cart { margin-top: 20px; padding: 10px; background: #f0e5da; }
+    input, textarea { display: block; margin: 5px 0 15px 0; padding: 5px; width: 100%; }
+  </style>
+</head>
+<body>
+
+  <h1>Sibel Yöresel Lezzetler</h1>
+  <p>Lezzetin en doğal haliyle sofranıza!</p>
+
+  <h2>Menü</h2>
+  <div class="menu-item">
+    <strong>Etli Ekmek</strong> – 90₺
+    <button onclick="addToCart('Etli Ekmek', 90)">Sepete Ekle</button>
+  </div>
+  <div class="menu-item">
+    <strong>İçli Köfte</strong> – 70₺
+    <button onclick="addToCart('İçli Köfte', 70)">Sepete Ekle</button>
+  </div>
+  <div class="menu-item">
+    <strong>Mantı</strong> – 85₺
+    <button onclick="addToCart('Mantı', 85)">Sepete Ekle</button>
+  </div>
+  <div class="menu-item">
+    <strong>Gözleme</strong> – 55₺
+    <button onclick="addToCart('Gözleme', 55)">Sepete Ekle</button>
+  </div>
+  <div class="menu-item">
+    <strong>Ev Baklavası</strong> – 60₺
+    <button onclick="addToCart('Ev Baklavası', 60)">Sepete Ekle</button>
+  </div>
+
+  <div id="cart">
+    <h3>Sepet</h3>
+    <ul id="cart-items"></ul>
+    <p><strong>Toplam:</strong> <span id="total">0</span>₺</p>
+  </div>
+
+  <h2>Sipariş Bilgileri</h2>
+  <form onsubmit="submitOrder(event)">
+    <label>Ad Soyad:</label>
+    <input type="text" id="name" required />
+    <label>Adres:</label>
+    <textarea id="address" required></textarea>
+    <label>Telefon:</label>
+    <input type="text" id="phone" required />
+    <button type="submit">Siparişi Gönder</button>
+  </form>
+
+  <div id="order-result"></div>
+
+  <script>
+    const cart = [];
+    function addToCart(item, price) {
+      cart.push({ item, price });
+      updateCart();
+    }
+
+    function updateCart() {
+      const cartItems = document.getElementById("cart-items");
+      const total = document.getElementById("total");
+      cartItems.innerHTML = "";
+      let sum = 0;
+      cart.forEach(({ item, price }) => {
+        const li = document.createElement("li");
+        li.textContent = `${item} - ${price}₺`;
+        cartItems.appendChild(li);
+        sum += price;
+      });
+      total.textContent = sum;
+    }
+
+    function submitOrder(e) {
+      e.preventDefault();
+      const name = document.getElementById("name").value;
+      const address = document.getElementById("address").value;
+      const phone = document.getElementById("phone").value;
+
+      if (cart.length === 0) {
+        alert("Sepetiniz boş!");
+        return;
+      }
+
+      const result = document.getElementById("order-result");
+      result.innerHTML = `
+        <h3>Sipariş Alındı!</h3>
+        <p><strong>Ad:</strong> ${name}</p>
+        <p><strong>Telefon:</strong> ${phone}</p>
+        <p><strong>Adres:</strong> ${address}</p>
+        <p><strong>Sipariş:</strong></p>
+        <ul>${cart.map(c => `<li>${c.item} – ${c.price}₺</li>`).join("")}</ul>
+        <p><strong>Toplam:</strong> ${cart.reduce((a, b) => a + b.price, 0)}₺</p>
+      `;
+    }
+  </script>
+
+</body>
+</html>
 

@@ -91,16 +91,16 @@
         return;
       }
 
-      const result = document.getElementById("order-result");
-      result.innerHTML = `
-        <h3>Sipariş Alındı!</h3>
-        <p><strong>Ad:</strong> ${name}</p>
-        <p><strong>Telefon:</strong> ${phone}</p>
-        <p><strong>Adres:</strong> ${address}</p>
-        <p><strong>Sipariş:</strong></p>
-        <ul>${cart.map(c => `<li>${c.item} – ${c.price}₺</li>`).join("")}</ul>
-        <p><strong>Toplam:</strong> ${cart.reduce((a, b) => a + b.price, 0)}₺</p>
-      `;
+      const total = cart.reduce((a, b) => a + b.price, 0);
+    const items = cart.map(c => `${c.item} – ${c.price}₺`).join(", ");
+
+    document.getElementById("orderItems").value = items;
+    document.getElementById("orderTotal").value = total + "₺";
+
+    e.target.submit(); // formu gerçekten gönder
+    document.getElementById("order-result").innerHTML = "<h3>Siparişiniz gönderildi! Teşekkür ederiz.</h3>";
+    e.target.reset(); // formu temizle
+
     }
   </script>
 

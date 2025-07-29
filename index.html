@@ -47,17 +47,24 @@
   </div>
 
   <h2>Sipariş Bilgileri</h2>
-  <form onsubmit="submitOrder(event)">
-    <label>Ad Soyad:</label>
-    <input type="text" id="name" required />
-    <label>Adres:</label>
-    <textarea id="address" required></textarea>
-    <label>Telefon:</label>
-    <input type="text" id="phone" required />
-    <button type="submit">Siparişi Gönder</button>
-  </form>
+<form action="https://formspree.io/f/myzpjlbp" method="POST" onsubmit="submitOrderToEmail(event)">
+  <label>Ad Soyad:</label>
+  <input type="text" name="Ad Soyad" id="name" required />
 
-  <div id="order-result"></div>
+  <label>Adres:</label>
+  <textarea name="Adres" id="address" required></textarea>
+
+  <label>Telefon:</label>
+  <input type="text" name="Telefon" id="phone" required />
+
+  <input type="hidden" name="Siparişler" id="orderItems" />
+  <input type="hidden" name="Toplam Tutar" id="orderTotal" />
+
+  <button type="submit">Siparişi Gönder</button>
+</form>
+
+<div id="order-result"></div>
+
 
   <script>
     const cart = [];

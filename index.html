@@ -82,6 +82,9 @@
   cart.forEach(({ item, price }, index) => {
     const li = document.createElement("li");
     li.textContent = `${item} - ${price}₺ `;
+     li.appendChild(removeBtn);
+    cartItems.appendChild(li);
+    sum += price;
 
     const removeBtn = document.createElement("button");
     removeBtn.textContent = "❌";
@@ -96,9 +99,7 @@
       updateCart(); // sepeti güncelle
     };
 
-    li.appendChild(removeBtn);
-    cartItems.appendChild(li);
-    sum += price;
+  
   });
 
   total.textContent = sum;

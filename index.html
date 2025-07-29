@@ -67,69 +67,77 @@
 
 
   <script>
-    const cart = [];
-    function addToCart(item, price) {
-      cart.push({ item, price });
-      updateCart();
+  // Global cart dizisi
+  let cart = [];
+
+  // Ürün sepete eklendiğinde çalışır
+  function addToCart(item, price) {
+    cart.push({ item, price });
+    updateCart();
+  }
+
+  // Sepet güncelleme fonksiyonu
+  function updateCart() {
+    const cartItems = document.getElementById("cart-items");
+    const total = document.getElementById("total");
+    cartItems.innerHTML = "";
+    let sum = 0;
+
+    // Her ürün için satır oluştur
+    cart.forEach((cartItem, index) => {
+      const li = document.createElement("li");
+      li.textContent = `${cartItem.item} - ${cartItem.price}₺`;
+
+      // Sil butonu
+      const removeBtn = document.createElement("button");
+      removeBtn.textContent = "❌";
+      removeBtn.style.marginLeft = "10px";
+      removeBtn.style.backgroundColor = "#ff4d4d";
+      removeBtn.style.color = "white";
+      removeBtn.style.border = "none";
+      removeBtn.style.padding = "2px 6px";
+      removeBtn.style.cursor = "pointer";
+
+      // Silme işlemi
+      removeBtn.onclick = () => {
+        cart.splice(index, 1); // diziden çıkar
+        updateCart(); // sepeti yeniden çiz
+      };
+
+      li.appendChild(removeBtn);
+      cartItems.appendChild(li);
+      sum += cartItem.price;
+    });
+
+    total.textContent = sum;
+  }
+
+  // Siparişi e-posta ile gönderme fonksiyonu
+  function submitOrderToEmail(e) {
+    e.preventDefault();
+
+    const name = document.getElementById("name").value;
+    const address = document.getElementById("address").value;
+    const phone = document.getElementById("phone").value;
+
+    if (cart.length === 0) {
+      alert("Sepetiniz boş!");
+      return;
     }
 
-   function updateCart() {
-  const cartItems = document.getElementById("cart-items");
-  const total = document.getElementById("total");
-  cartItems.innerHTML = "";
-  let sum = 0;
-
-  cart.forEach(({ item, price }, index) => {
-    const li = document.createElement("li");
-    li.textContent = `${item} - ${price}₺ `;
-     li.appendChild(removeBtn);
-    cartItems.appendChild(li);
-    sum += price;
-
-    const removeBtn = document.createElement("button");
-    removeBtn.textContent = "❌";
-    removeBtn.style.marginLeft = "10px";
-    removeBtn.style.backgroundColor = "#ff4d4d";
-    removeBtn.style.color = "white";
-    removeBtn.style.border = "none";
-    removeBtn.style.cursor = "pointer";
-    removeBtn.style.padding = "2px 6px";
-    removeBtn.onclick = () => {
-      cart.splice(index, 1); // ürünü sil
-      updateCart(); // sepeti güncelle
-    };
-
-  
-  });
-
-  total.textContent = sum;
-}
-
-    }
-
-    function submitOrder(e) {
-      e.preventDefault();
-      const name = document.getElementById("name").value;
-      const address = document.getElementById("address").value;
-      const phone = document.getElementById("phone").value;
-
-      if (cart.length === 0) {
-        alert("Sepetiniz boş!");
-        return;
-      }
-
-      const total = cart.reduce((a, b) => a + b.price, 0);
+    const total = cart.reduce((a, b) => a + b.price, 0);
     const items = cart.map(c => `${c.item} – ${c.price}₺`).join(", ");
 
     document.getElementById("orderItems").value = items;
     document.getElementById("orderTotal").value = total + "₺";
 
-    e.target.submit(); // formu gerçekten gönder
+    e.target.submit(); // formu gönder
     document.getElementById("order-result").innerHTML = "<h3>Siparişiniz gönderildi! Teşekkür ederiz.</h3>";
-    e.target.reset(); // formu temizle
-
-    }
-  </script>
+    e.target.reset();
+    cart = []; // sepeti temizle
+    updateCart();
+  }
+</script>
 
 </body>
 </html>
